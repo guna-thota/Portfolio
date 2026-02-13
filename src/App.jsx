@@ -8,18 +8,18 @@ import {
   Cloud,
   Code2,
   Sparkles,
-  Copy,
-  Check,
+  Mail,
+  Linkedin,
 } from "lucide-react";
 
 const cx = (...c) => c.filter(Boolean).join(" ");
 
 const pipeline = [
-  { id: "source", label: "Source", hint: "Contracts • validation • drift" },
-  { id: "adf", label: "ADF", hint: "Orchestrate • retries • idempotency" },
-  { id: "adls", label: "ADLS", hint: "Zones • partitions • governance" },
-  { id: "dbx", label: "Databricks", hint: "Spark • incremental • quality gates" },
-  { id: "sqldw", label: "SQL DW", hint: "Modeling • tuning • freshness" },
+  { id: "source", label: "Source", hint: "contracts • validation • drift" },
+  { id: "adf", label: "ADF", hint: "orchestration • retries • idempotency" },
+  { id: "adls", label: "ADLS", hint: "zones • partitions • governance" },
+  { id: "dbx", label: "Databricks", hint: "spark • incremental • quality gates" },
+  { id: "sqldw", label: "SQL DW", hint: "modeling • tuning • freshness" },
   { id: "bi", label: "BI", hint: "KPIs • semantic layer • trust" },
 ];
 
@@ -103,56 +103,56 @@ const recruiterSummary = {
 const engineerDeep = {
   source: {
     what: [
-      "Negotiated source contracts: schema, required fields, and change management.",
-      "Implemented early validation (type checks, null thresholds, sanity constraints).",
+      "Defined source contracts: schema, required fields, and change management.",
+      "Early validation: type checks, null thresholds, sanity constraints.",
     ],
     tech: ["REST APIs", "Batch files", "Event logs"],
     reliability: [
       "Schema drift detection + quarantine lane",
-      "Sampling-based anomaly checks (volume, null%, distinct counts)",
+      "Sampling anomaly checks (volume, null%, distinct counts)",
       "Backpressure limits on bursts",
     ],
   },
   adf: {
     what: [
       "Built modular ADF pipelines (copy → transform → notify) with parameters.",
-      "Added run IDs + correlation IDs to trace lineage end-to-end.",
+      "Run IDs + correlation IDs to trace lineage end-to-end.",
     ],
     tech: ["ADF", "Managed Identity", "Key Vault"],
     reliability: [
       "Exponential retry + circuit breaker for flaky sources",
       "Idempotency keys + watermarking",
-      "Alert routing by severity (on-call vs FYI)",
+      "Alert routing by severity",
     ],
   },
   adls: {
     what: [
-      "Designed lake zones with consistent folder conventions and naming.",
-      "Optimized partitioning for typical BI usage (date, region, product).",
+      "Designed lake zones with consistent naming and folder conventions.",
+      "Partitioning strategy aligned to BI access patterns.",
     ],
     tech: ["ADLS Gen2", "Delta/Parquet", "RBAC/ACLs"],
     reliability: [
       "Immutable raw + append-only patterns",
       "Lifecycle rules + cost controls",
-      "Checksum validation + duplicate detection",
+      "Checksum + duplicate detection",
     ],
   },
   dbx: {
     what: [
-      "Spark transformations: cleansing, joins, dedupe, SCD handling, enrichment.",
-      "Incremental processing using watermarks and MERGE patterns.",
+      "Spark transformations: cleansing, joins, dedupe, SCD handling.",
+      "Incremental processing using watermarks + MERGE patterns.",
     ],
     tech: ["Databricks", "Apache Spark", "Delta Lake"],
     reliability: [
-      "Job SLOs (duration/failure rate) + auto-remediation hooks",
-      "Skew handling (salting, repartition) + AQE",
-      "Data quality gates before publish",
+      "Job SLOs (duration/failure rate) + monitoring",
+      "Skew handling + AQE",
+      "Quality gates before publish",
     ],
   },
   sqldw: {
     what: [
-      "Modeled serving tables (star schema) and aggregation tables.",
-      "Query optimization: indexing strategy + materialized summaries.",
+      "Serving models: star schema + aggregation tables.",
+      "Query optimization: indexing + materialized summaries.",
     ],
     tech: ["SQL DW/Synapse", "T-SQL", "Dimensional modeling"],
     reliability: [
@@ -163,56 +163,35 @@ const engineerDeep = {
   },
   bi: {
     what: [
-      "Defined a metric layer: consistent KPI definitions and filters.",
-      "Built dashboards focused on decision loops (not vanity charts).",
+      "Defined metric layer: consistent KPI definitions and filters.",
+      "Dashboards focused on decision loops and trust in metrics.",
     ],
     tech: ["Power BI/Tableau", "Semantic layer", "KPIs"],
     reliability: [
-      "Metric tests (same query, same answer) + versioning",
+      "Metric tests + versioning",
       "Staleness warnings + confidence indicators",
-      "Cache strategy tuned for peak usage",
+      "Cache strategy for peak usage",
     ],
   },
 };
 
-function CopyButton({ value }) {
-  const [ok, setOk] = useState(false);
-
-  return (
-    <button
-      className="btn"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(value);
-          setOk(true);
-          setTimeout(() => setOk(false), 1200);
-        } catch {}
-      }}
-      type="button"
-    >
-      {ok ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-      <span style={{ marginLeft: 8 }}>{ok ? "Copied" : "Copy"}</span>
-    </button>
-  );
-}
-
 export default function App() {
-  const [recruiterMode, setRecruiterMode] = useState(true);
+  const [summaryMode, setSummaryMode] = useState(true);
   const [selected, setSelected] = useState("adf");
 
   const headline = useMemo(
     () =>
-      recruiterMode
-        ? "Recruiter Mode: crisp highlights, impact-first."
-        : "Engineer Mode: deep technical detail + reliability guardrails.",
-    [recruiterMode]
+      summaryMode
+        ? "Summary view: outcomes, scope, and what shipped."
+        : "Technical view: implementation detail + reliability guardrails.",
+    [summaryMode]
   );
 
   const summary = recruiterSummary[selected];
   const deep = engineerDeep[selected];
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
       <div className="noise" />
       <div className="grid" />
 
@@ -229,27 +208,40 @@ export default function App() {
 
           <div className="actions">
             <div className="toggle">
-              <span>Recruiter</span>
+              <span>Summary</span>
               <div
                 className="switch"
-                onClick={() => setRecruiterMode((v) => !v)}
+                onClick={() => setSummaryMode((v) => !v)}
                 role="switch"
-                aria-checked={!recruiterMode}
+                aria-checked={!summaryMode}
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") setRecruiterMode((v) => !v);
+                  if (e.key === "Enter" || e.key === " ") setSummaryMode((v) => !v);
                 }}
               >
                 <motion.div
                   className="knob"
-                  animate={{ x: recruiterMode ? 0 : 18 }}
+                  animate={{ x: summaryMode ? 0 : 18 }}
                   transition={{ type: "spring", stiffness: 520, damping: 30 }}
                 />
               </div>
-              <span>Engineer</span>
+              <span>Technical</span>
             </div>
 
-            <CopyButton value="Guna Durga Prashanth Thota" />
+            <a className="btn" href="mailto:gunaprashant@gmail.com">
+              <Mail className="h-4 w-4" />
+              <span style={{ marginLeft: 8 }}>Email</span>
+            </a>
+
+            <a
+              className="btn"
+              href="https://www.linkedin.com/in/gthota27/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Linkedin className="h-4 w-4" />
+              <span style={{ marginLeft: 8 }}>LinkedIn</span>
+            </a>
           </div>
         </div>
 
@@ -263,22 +255,28 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.22 }}
               >
-                Premium portfolio.
+                Data Engineering Portfolio
                 <br />
                 <span style={{ color: "rgba(255,255,255,0.65)" }}>
-                  Two brains: recruiter + engineer.
+                  Pipeline architecture • reliability • system thinking
                 </span>
               </motion.h2>
 
               <div className="subtitle">
-                {headline} Click each pipeline node to reveal what I built, the tech behind it, and the
-                reliability tricks that keep it stable in production.
+                {headline} Click a pipeline stage to drill into scope, tooling, and reliability
+                decisions (idempotency, drift handling, monitoring, SLAs).
               </div>
 
               <div className="pills">
-                <span className="pill"><ShieldCheck className="h-4 w-4" /> Reliability-first</span>
-                <span className="pill"><Code2 className="h-4 w-4" /> Systems thinking</span>
-                <span className="pill"><Sparkles className="h-4 w-4" /> Pipeline craftsmanship</span>
+                <span className="pill">
+                  <ShieldCheck className="h-4 w-4" /> Reliability-first
+                </span>
+                <span className="pill">
+                  <Code2 className="h-4 w-4" /> System design mindset
+                </span>
+                <span className="pill">
+                  <Sparkles className="h-4 w-4" /> Production guardrails
+                </span>
                 <span className="pill">Python</span>
                 <span className="pill">SQL</span>
                 <span className="pill">Cloud</span>
@@ -289,12 +287,23 @@ export default function App() {
           <div className="card">
             <div className="cardInner">
               <div className="sectionTitle" style={{ marginTop: 0 }}>
-                <h2>Featured Repos</h2>
-                <p>(placeholders — swap later)</p>
+                <h2>About</h2>
+                <p>What I work on</p>
               </div>
 
               <div className="panel">
-                <div className="smallTitle">Quick links</div>
+                <div className="smallTitle">Scope</div>
+                <ul className="list">
+                  <li><span className="dot" />End-to-end pipelines: ingestion → lake → transforms → warehouse → BI</li>
+                  <li><span className="dot" />Reliability: idempotency, retries, drift handling, monitoring, SLAs</li>
+                  <li><span className="dot" />Performance + cost: partitioning, incremental loads, query tuning</li>
+                </ul>
+              </div>
+
+              <div style={{ height: 12 }} />
+
+              <div className="panel">
+                <div className="smallTitle">Projects</div>
                 <div className="stack">
                   {[
                     "lakehouse-blueprint",
@@ -319,20 +328,18 @@ export default function App() {
 
               <div className="panel">
                 <div className="smallTitle">Contact</div>
-                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, lineHeight: 1.6 }}>
-                  Add your LinkedIn + email here after you’re happy with the layout.
-                  <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
-                    <a className="stackChip" href="https://github.com/guna-thota" target="_blank" rel="noreferrer">
-                      github.com/guna-thota
-                    </a>
-                    <a className="stackChip" href="mailto:you@example.com">you@example.com</a>
-                    <a className="stackChip" href="https://www.linkedin.com/in/" target="_blank" rel="noreferrer">
-                      linkedin.com/in/your-handle
-                    </a>
-                  </div>
+                <div className="stack">
+                  <a className="stackChip" href="https://github.com/guna-thota" target="_blank" rel="noreferrer">
+                    github.com/guna-thota
+                  </a>
+                  <a className="stackChip" href="mailto:gunaprashant@gmail.com">
+                    gunaprashant@gmail.com
+                  </a>
+                  <a className="stackChip" href="https://www.linkedin.com/in/gthota27/" target="_blank" rel="noreferrer">
+                    linkedin.com/in/gthota27
+                  </a>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -340,8 +347,8 @@ export default function App() {
         {/* Pipeline */}
         <div className="pipelineWrap">
           <div className="sectionTitle">
-            <h2>Interactive Data Pipeline</h2>
-            <p>Source → ADF → ADLS → Databricks → SQL DW → BI</p>
+            <h2>End-to-End Data Pipeline</h2>
+            <p>Source → ADF → ADLS → Databricks → SQL DW → BI • click a stage</p>
           </div>
 
           <div className={cx("card", "pipelineCard")}>
@@ -404,10 +411,7 @@ export default function App() {
                           <div className="nodeHint">{n.hint}</div>
                         </div>
                       </div>
-
-                      <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 12 }}>
-                        {active ? "Selected" : ""}
-                      </div>
+                      {/* intentionally blank: no “Selected” text */}
                     </div>
                   </motion.div>
                 );
@@ -420,16 +424,16 @@ export default function App() {
                 <p>{summary.subtitle}</p>
 
                 <AnimatePresence mode="wait">
-                  {recruiterMode ? (
+                  {summaryMode ? (
                     <motion.div
-                      key="rec"
+                      key="sum"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
                       transition={{ duration: 0.16 }}
                     >
                       <div className="smallTitle" style={{ marginTop: 12 }}>
-                        Recruiter highlights
+                        Summary
                       </div>
                       <ul className="list">
                         {summary.highlights.map((h) => (
@@ -442,7 +446,7 @@ export default function App() {
                     </motion.div>
                   ) : (
                     <motion.div
-                      key="eng"
+                      key="tech"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
@@ -468,13 +472,15 @@ export default function App() {
                 <div className="smallTitle">Tech</div>
                 <div className="stack">
                   {deep.tech.map((t) => (
-                    <span key={t} className="stackChip">{t}</span>
+                    <span key={t} className="stackChip">
+                      {t}
+                    </span>
                   ))}
                 </div>
 
                 <div style={{ height: 12 }} />
 
-                <div className="smallTitle">Reliability tricks</div>
+                <div className="smallTitle">Reliability</div>
                 <ul className="list">
                   {deep.reliability.map((r) => (
                     <li key={r}>
@@ -487,11 +493,10 @@ export default function App() {
             </div>
           </div>
 
-          <div className="footer">
-            © {new Date().getFullYear()} • guna-thota • Built to feel premium, not basic
-          </div>
+          <div className="footer">© {new Date().getFullYear()} • guna-thota</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
+
