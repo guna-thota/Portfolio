@@ -1,230 +1,833 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Linkedin, LineChart, Brain, Cpu, X } from "lucide-react";
+import {
+  ShieldCheck,
+  Server,
+  Database,
+  BarChart3,
+  Cloud,
+  Sparkles,
+  Mail,
+  Linkedin,
+  BadgeCheck,
+  Gauge,
+  Clock,
+  Layers,
+  X,
+  LineChart,
+  Brain,
+  Cpu,
+} from "lucide-react";
 
-/* =====================================================
-   DARK AZURE ENTERPRISE PORTFOLIO
-   Glass • Depth • Subtle Motion • Recruiter Credible
-===================================================== */
+const cx = (...c) => c.filter(Boolean).join(" ");
 
-const azureGradient = "linear-gradient(135deg, rgba(30,129,176,0.25), rgba(20,93,160,0.25))";
+/* =========================
+   PIPELINE CONFIG
+   ========================= */
+
+const PATH_D = "M 40 70 C 220 20, 360 120, 540 70 S 860 20, 1080 70";
+
+const pipeline = [
+  { id: "source", label: "Source Systems", hint: "APIs • files • operational DBs" },
+  { id: "adf", label: "Azure Data Factory", hint: "orchestration • scheduling • retries" },
+  { id: "adls", label: "ADLS Gen2", hint: "raw → bronze → silver → gold" },
+  { id: "dbx", label: "Databricks (Spark)", hint: "transformations • incremental" },
+  { id: "sqldw", label: "Azure SQL DW", hint: "modeling • performance" },
+  { id: "bi", label: "BI Layer", hint: "KPIs • semantic layer" },
+];
+
+const summaryByStage = {
+  source: {
+    title: "Source Systems",
+    bullets: [
+      "Defined ingestion contracts (schema + SLAs)",
+      "Validated early to prevent bad data entering the pipeline",
+      "Captured metadata for traceability and auditability",
+    ],
+  },
+  adf: {
+    title: "Azure Data Factory",
+    bullets: [
+      "Parameterized pipelines for dev/stage/prod",
+      "Retries + alerting for stable operations",
+      "Idempotent loads using watermark strategy",
+    ],
+  },
+  adls: {
+    title: "ADLS Gen2",
+    bullets: [
+      "Layered lake design (raw/bronze/silver/gold)",
+      "Partitioning aligned to reporting access patterns",
+      "RBAC + lifecycle policies for governance and cost control",
+    ],
+  },
+  dbx: {
+    title: "Databricks (Spark)",
+    bullets: [
+      "PySpark transformations (cleanse, join, dedupe, enrich)",
+      "Incremental processing (MERGE) to reduce compute and runtime",
+      "Quality gates before publish to serving layer",
+    ],
+  },
+  sqldw: {
+    title: "Azure SQL DW",
+    bullets: [
+      "Star schema / dimensional modeling for analytics",
+      "Index + execution plan tuning for faster queries",
+      "Freshness monitoring for reporting SLAs",
+    ],
+  },
+  bi: {
+    title: "BI Layer",
+    bullets: [
+      "Standardized KPI definitions (single source of truth)",
+      "Dashboards designed around decision workflows",
+      "Controlled access to ensure trusted metrics",
+    ],
+  },
+};
+
+const technicalByStage = {
+  source: {
+    tech: ["REST APIs", "Batch ingestion", "Schema checks"],
+    reliability: ["Schema drift detection", "Null/format validation", "Volume anomaly alerts"],
+  },
+  adf: {
+    tech: ["ADF", "Managed Identity", "Key Vault"],
+    reliability: ["Exponential retry", "Watermark incremental loads", "Alert routing by severity"],
+  },
+  adls: {
+    tech: ["ADLS Gen2", "Parquet/Delta", "ACLs/RBAC"],
+    reliability: ["Immutable raw zone", "Checksum/duplicate detection", "Partition strategy for performance"],
+  },
+  dbx: {
+    tech: ["Databricks", "PySpark", "Delta Lake"],
+    reliability: ["Skew handling + repartition", "AQE / caching where needed", "Pre-publish validation gates"],
+  },
+  sqldw: {
+    tech: ["Azure SQL DW", "T-SQL", "Modeling"],
+    reliability: ["Row-count reconciliation", "Index/statistics management", "Late-arrival handling"],
+  },
+  bi: {
+    tech: ["Power BI / Tableau", "Semantic modeling"],
+    reliability: ["Metric consistency checks", "Staleness indicators", "Governed access"],
+  },
+};
+
+/* =========================
+   PROJECTS (your 3 repos)
+   NOTE: titles avoid “AI” wording on the site
+   ========================= */
 
 const projects = [
   {
-    id: "farming",
-    title: "Yield Prediction – Time Series Modeling",
+    id: "proj1",
     icon: LineChart,
+    title: "Farming Yield Prediction (Time-Series)",
     repo: "AI-Assisted-Farming-for-Crop-Recommendation-Farm-Yield-Prediction-Application",
-    overview:
-      "End-to-end time-series workflow built on multivariate seasonal datasets for predictive modeling.",
+    // If the repo is NOT under guna-thota, replace this URL with the real one.
+    url: "https://github.com/guna-thota/AI-Assisted-Farming-for-Crop-Recommendation-Farm-Yield-Prediction-Application",
+    oneLiner: "Multivariate seasonal modeling with an interpretable sequence approach for yield forecasting.",
     metrics: [
-      "10+ years historical seasonal data",
-      "100K+ structured time-series records",
-      "Evaluated against regression baselines",
-      "Optimized preprocessing for retraining cycles",
+      "10+ years historical seasonal data (weather + outcomes)",
+      "100K+ structured time-series records (engineering-scale)",
+      "Benchmarked vs regression baselines (experimental comparison)",
+      "Preprocessing pipeline optimized for retraining iterations",
     ],
-    architecture: (
-      <svg viewBox="0 0 650 260" width="100%" height="260">
-        <rect x="40" y="100" width="160" height="60" rx="10" fill="#0e2a47" />
-        <text x="120" y="135" fill="white" fontSize="12" textAnchor="middle">Data Sources</text>
-        <rect x="245" y="100" width="160" height="60" rx="10" fill="#134074" />
-        <text x="325" y="135" fill="white" fontSize="12" textAnchor="middle">Feature Engineering</text>
-        <rect x="450" y="100" width="160" height="60" rx="10" fill="#1e6091" />
-        <text x="530" y="135" fill="white" fontSize="12" textAnchor="middle">Sequence Model</text>
-        <line x1="200" y1="130" x2="245" y2="130" stroke="#4ea8de" />
-        <line x1="405" y1="130" x2="450" y2="130" stroke="#4ea8de" />
+    architectureTitle: "Architecture – Time-Series Modeling Flow",
+    architectureSvg: (
+      <svg viewBox="0 0 920 260" width="100%" height="220">
+        <defs>
+          <linearGradient id="azg1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgba(78,168,222,0.35)" />
+            <stop offset="100%" stopColor="rgba(30,129,176,0.35)" />
+          </linearGradient>
+        </defs>
+
+        <rect x="35" y="95" width="200" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="135" y="130" fill="white" fontSize="14" textAnchor="middle">Historical Data</text>
+        <text x="135" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">weather + yield</text>
+
+        <rect x="285" y="95" width="200" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="385" y="130" fill="white" fontSize="14" textAnchor="middle">Feature Engineering</text>
+        <text x="385" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">weekly windows</text>
+
+        <rect x="535" y="95" width="200" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="635" y="130" fill="white" fontSize="14" textAnchor="middle">Sequence Model</text>
+        <text x="635" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">LSTM-style + attention</text>
+
+        <rect x="785" y="95" width="100" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="835" y="130" fill="white" fontSize="14" textAnchor="middle">Output</text>
+        <text x="835" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">forecast</text>
+
+        <line x1="235" y1="130" x2="285" y2="130" stroke="url(#azg1)" strokeWidth="2" />
+        <line x1="485" y1="130" x2="535" y2="130" stroke="url(#azg1)" strokeWidth="2" />
+        <line x1="735" y1="130" x2="785" y2="130" stroke="url(#azg1)" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    id: "gait",
-    title: "Video-Based Feature Extraction Pipeline",
+    id: "proj2",
     icon: Brain,
+    title: "Gait Recognition (Video → Embeddings)",
     repo: "DNN-for-person-recognition-using-physiological-parameters",
-    overview:
-      "Multi-stage pipeline transforming raw video into structured temporal embeddings.",
+    url: "https://github.com/guna-thota/DNN-for-person-recognition-using-physiological-parameters",
+    oneLiner: "Two-stage pipeline transforming raw video frames into temporal embeddings for identification.",
     metrics: [
-      "300+ validation subjects",
-      "Thousands of frames processed",
-      "Robust across covariate conditions",
-      "Modular CNN → RNN design",
+      "300+ subjects referenced in benchmark-style evaluation",
+      "Thousands of frames processed per run (engineering-scale)",
+      "Designed for robustness across covariate conditions",
+      "Modular pipeline: pose extraction → temporal modeling → embedding",
     ],
-    architecture: (
-      <svg viewBox="0 0 650 260" width="100%" height="260">
-        <rect x="40" y="100" width="160" height="60" rx="10" fill="#0e2a47" />
-        <text x="120" y="135" fill="white" fontSize="12" textAnchor="middle">Video Frames</text>
-        <rect x="245" y="100" width="160" height="60" rx="10" fill="#134074" />
-        <text x="325" y="135" fill="white" fontSize="12" textAnchor="middle">Pose Extraction</text>
-        <rect x="450" y="100" width="160" height="60" rx="10" fill="#1e6091" />
-        <text x="530" y="135" fill="white" fontSize="12" textAnchor="middle">Temporal Encoding</text>
-        <line x1="200" y1="130" x2="245" y2="130" stroke="#4ea8de" />
-        <line x1="405" y1="130" x2="450" y2="130" stroke="#4ea8de" />
+    architectureTitle: "Architecture – Video Feature Pipeline",
+    architectureSvg: (
+      <svg viewBox="0 0 920 260" width="100%" height="220">
+        <defs>
+          <linearGradient id="azg2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgba(78,168,222,0.35)" />
+            <stop offset="100%" stopColor="rgba(30,129,176,0.35)" />
+          </linearGradient>
+        </defs>
+
+        <rect x="35" y="95" width="180" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="125" y="130" fill="white" fontSize="14" textAnchor="middle">Video Frames</text>
+
+        <rect x="255" y="95" width="220" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="365" y="130" fill="white" fontSize="14" textAnchor="middle">Pose Extraction</text>
+        <text x="365" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">spatial features</text>
+
+        <rect x="515" y="95" width="220" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="625" y="130" fill="white" fontSize="14" textAnchor="middle">Temporal Modeling</text>
+        <text x="625" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">GRU/LSTM-style</text>
+
+        <rect x="775" y="95" width="110" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="830" y="130" fill="white" fontSize="14" textAnchor="middle">Embedding</text>
+
+        <line x1="215" y1="130" x2="255" y2="130" stroke="url(#azg2)" strokeWidth="2" />
+        <line x1="475" y1="130" x2="515" y2="130" stroke="url(#azg2)" strokeWidth="2" />
+        <line x1="735" y1="130" x2="775" y2="130" stroke="url(#azg2)" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    id: "agent",
-    title: "Natural Language Data Query Engine",
+    id: "proj3",
     icon: Cpu,
+    title: "Natural Language → SQL Analysis Tool",
     repo: "Ai-dataanalysis-agent",
-    overview:
-      "Structured analytics interface translating user queries into executable SQL.",
+    url: "https://github.com/guna-thota/Ai-dataanalysis-agent",
+    oneLiner: "A query interface that converts natural language questions into SQL and executes them on local tabular data.",
     metrics: [
-      "CSV & Excel ingestion (~100MB tested)",
-      "Schema-aware SQL generation",
-      "In-memory processing (DuckDB)",
-      "Reduces manual query effort",
+      "CSV/Excel ingestion (tested locally up to ~100MB)",
+      "Schema-aware SQL generation + query execution",
+      "In-memory analytics via DuckDB (OLAP-style)",
+      "Designed as a lightweight analyst workflow tool",
     ],
-    architecture: (
-      <svg viewBox="0 0 650 260" width="100%" height="260">
-        <rect x="40" y="100" width="160" height="60" rx="10" fill="#0e2a47" />
-        <text x="120" y="135" fill="white" fontSize="12" textAnchor="middle">User Query</text>
-        <rect x="245" y="100" width="160" height="60" rx="10" fill="#134074" />
-        <text x="325" y="135" fill="white" fontSize="12" textAnchor="middle">Query Translation</text>
-        <rect x="450" y="100" width="160" height="60" rx="10" fill="#1e6091" />
-        <text x="530" y="135" fill="white" fontSize="12" textAnchor="middle">Execution Engine</text>
-        <line x1="200" y1="130" x2="245" y2="130" stroke="#4ea8de" />
-        <line x1="405" y1="130" x2="450" y2="130" stroke="#4ea8de" />
+    architectureTitle: "Architecture – Query Translation & Execution",
+    architectureSvg: (
+      <svg viewBox="0 0 920 260" width="100%" height="220">
+        <defs>
+          <linearGradient id="azg3" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgba(78,168,222,0.35)" />
+            <stop offset="100%" stopColor="rgba(30,129,176,0.35)" />
+          </linearGradient>
+        </defs>
+
+        <rect x="35" y="95" width="180" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="125" y="130" fill="white" fontSize="14" textAnchor="middle">User Question</text>
+
+        <rect x="255" y="95" width="220" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="365" y="130" fill="white" fontSize="14" textAnchor="middle">SQL Translation</text>
+        <text x="365" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">schema-aware</text>
+
+        <rect x="515" y="95" width="220" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="625" y="130" fill="white" fontSize="14" textAnchor="middle">Execution Engine</text>
+        <text x="625" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">DuckDB</text>
+
+        <rect x="775" y="95" width="110" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
+        <text x="830" y="130" fill="white" fontSize="14" textAnchor="middle">Results</text>
+
+        <line x1="215" y1="130" x2="255" y2="130" stroke="url(#azg3)" strokeWidth="2" />
+        <line x1="475" y1="130" x2="515" y2="130" stroke="url(#azg3)" strokeWidth="2" />
+        <line x1="735" y1="130" x2="775" y2="130" stroke="url(#azg3)" strokeWidth="2" />
       </svg>
     ),
   },
 ];
 
-export default function App() {
-  const [activeProject, setActiveProject] = useState(null);
+function NodeIcon({ id }) {
+  const cls = "h-5 w-5";
+  switch (id) {
+    case "source":
+      return <Server className={cls} />;
+    case "adf":
+      return <Cloud className={cls} />;
+    case "adls":
+      return <Database className={cls} />;
+    case "dbx":
+      return <Sparkles className={cls} />;
+    case "sqldw":
+      return <Database className={cls} />;
+    case "bi":
+      return <BarChart3 className={cls} />;
+    default:
+      return <Server className={cls} />;
+  }
+}
 
+function Stat({ icon: Icon, label, value, note }) {
   return (
-    <div style={pageStyle}>
-      <div style={headerStyle}>
+    <div className="panel" style={{ padding: 14 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+        }}
+      >
         <div>
-          <h1 style={{ margin: 0 }}>Guna Durga Prashanth Thota</h1>
-          <div style={{ opacity: 0.7 }}>Data Engineer (Azure + Spark)</div>
+          <div className="smallTitle">{label}</div>
+          <div style={{ fontSize: 18, fontWeight: 800, marginTop: 2 }}>
+            {value}
+          </div>
         </div>
-        <div style={{ display: "flex", gap: 14 }}>
-          <a href="mailto:gunaprashant@gmail.com" style={buttonStyle}><Mail size={16}/> Email</a>
-          <a href="https://www.linkedin.com/in/gthota27/" target="_blank" rel="noreferrer" style={buttonStyle}><Linkedin size={16}/> LinkedIn</a>
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 14,
+            border: "1px solid rgba(255,255,255,0.10)",
+            background: "rgba(255,255,255,0.05)",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <Icon className="h-5 w-5" />
         </div>
       </div>
-
-      <div style={glassCard}>
-        <h2>Professional Summary</h2>
-        <p style={{ lineHeight: 1.7, opacity: 0.9 }}>
-          Data Engineer experienced in building Azure-native data pipelines supporting analytics and ML workloads.
-          Strong focus on structured data modeling, scalable transformations, and production reliability.
-          Skilled in designing governed, performance-optimized data systems for enterprise environments.
-        </p>
-      </div>
-
-      <h2 style={{ marginTop: 60 }}>Selected Engineering Work</h2>
-
-      <div style={{ display: "grid", gap: 28 }}>
-        {projects.map((proj) => (
-          <motion.div
-            key={proj.id}
-            whileHover={{ translateY: -4 }}
-            style={glassCard}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <proj.icon size={20}/>
-              <h3 style={{ margin: 0 }}>{proj.title}</h3>
-            </div>
-
-            <p style={{ opacity: 0.85 }}>{proj.overview}</p>
-
-            <strong>Scale & Scope</strong>
-            <ul style={{ marginTop: 8 }}>
-              {proj.metrics.map((m,i)=>(<li key={i}>{m}</li>))}
-            </ul>
-
-            <div style={{ display:"flex", gap:12, marginTop:12 }}>
-              <a href={`https://github.com/guna-thota/${proj.repo}`} target="_blank" rel="noreferrer" style={chipStyle}>Repository</a>
-              <button style={chipStyle} onClick={()=>setActiveProject(proj)}>Architecture</button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <AnimatePresence>
-        {activeProject && (
-          <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} style={modalOverlay} onClick={()=>setActiveProject(null)}>
-            <motion.div initial={{scale:0.95}} animate={{scale:1}} exit={{scale:0.95}} style={modalStyle} onClick={(e)=>e.stopPropagation()}>
-              <div style={{ display:"flex", justifyContent:"space-between" }}>
-                <h3>{activeProject.title} – Architecture</h3>
-                <X onClick={()=>setActiveProject(null)} style={{cursor:"pointer"}}/>
-              </div>
-              {activeProject.architecture}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {note ? (
+        <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
+          {note}
+        </div>
+      ) : null}
     </div>
   );
 }
 
-/* STYLES */
+/* =========================
+   MODAL
+   ========================= */
 
-const pageStyle = {
-  background: "#071421",
-  minHeight: "100vh",
-  padding: 50,
-  color: "white",
-  fontFamily: "Segoe UI, system-ui, sans-serif",
-};
+function Modal({ open, title, children, onClose }) {
+  return (
+    <AnimatePresence>
+      {open ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.65)",
+            display: "grid",
+            placeItems: "center",
+            zIndex: 9999,
+            padding: 16,
+          }}
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ y: 10, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 10, opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.16 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "min(920px, 96vw)",
+              borderRadius: 18,
+              border: "1px solid rgba(255,255,255,0.12)",
+              background:
+                "linear-gradient(180deg, rgba(15,25,40,0.92), rgba(10,18,30,0.92))",
+              boxShadow: "0 24px 80px rgba(0,0,0,0.55)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "14px 16px",
+                borderBottom: "1px solid rgba(255,255,255,0.10)",
+              }}
+            >
+              <div style={{ fontWeight: 800 }}>{title}</div>
+              <button
+                className="btn"
+                style={{ padding: "8px 10px" }}
+                onClick={onClose}
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-const headerStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: 40,
-};
+            <div style={{ padding: 16 }}>{children}</div>
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  );
+}
 
-const glassCard = {
-  background: azureGradient,
-  backdropFilter: "blur(12px)",
-  border: "1px solid rgba(78,168,222,0.3)",
-  padding: 28,
-  borderRadius: 14,
-  boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
-};
+export default function App() {
+  const [summaryMode, setSummaryMode] = useState(true);
+  const [selected, setSelected] = useState("adf");
 
-const buttonStyle = {
-  background: "#1e6091",
-  padding: "8px 14px",
-  borderRadius: 8,
-  color: "white",
-  textDecoration: "none",
-  display: "flex",
-  alignItems: "center",
-  gap: 6,
-};
+  const [activeProject, setActiveProject] = useState(null);
 
-const chipStyle = {
-  background: "#0e2a47",
-  padding: "6px 14px",
-  borderRadius: 6,
-  border: "1px solid #4ea8de",
-  color: "white",
-  cursor: "pointer",
-};
+  const headline = useMemo(
+    () =>
+      summaryMode
+        ? "Recruiter view: scope, ownership, and outcomes."
+        : "Engineer view: implementation details + reliability controls.",
+    [summaryMode]
+  );
 
-const modalOverlay = {
-  position:"fixed",
-  top:0,
-  left:0,
-  width:"100vw",
-  height:"100vh",
-  background:"rgba(0,0,0,0.7)",
-  display:"flex",
-  justifyContent:"center",
-  alignItems:"center",
-  zIndex:1000,
-};
+  const summary = summaryByStage[selected];
+  const tech = technicalByStage[selected];
 
-const modalStyle = {
-  background:"#0b1d2c",
-  padding:30,
-  borderRadius:14,
-  width:"750px",
-  maxWidth:"95%",
-  border:"1px solid rgba(78,168,222,0.4)",
-};
+  return (
+    <div style={{ position: "relative" }}>
+      <div className="noise" />
+      <div className="grid" />
+
+      <div className="shell">
+        {/* HEADER */}
+        <div className="topbar">
+          <div className="brand">
+            <div className="logo" />
+            <div>
+              <h1>Guna Durga Prashanth Thota</h1>
+              <p>Data Engineer (Azure + Spark)</p>
+            </div>
+          </div>
+
+          <div className="actions">
+            <div className="toggle" title="Toggle recruiter vs technical detail">
+              <span>Recruiter</span>
+              <div className="switch" onClick={() => setSummaryMode((v) => !v)}>
+                <motion.div
+                  className="knob"
+                  animate={{ x: summaryMode ? 0 : 18 }}
+                  transition={{ type: "spring", stiffness: 520, damping: 30 }}
+                />
+              </div>
+              <span>Engineer</span>
+            </div>
+
+            <a className="btn" href="mailto:gunaprashant@gmail.com">
+              <Mail className="h-4 w-4" />
+              <span style={{ marginLeft: 8 }}>Email</span>
+            </a>
+
+            <a
+              className="btn"
+              href="https://www.linkedin.com/in/gthota27/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Linkedin className="h-4 w-4" />
+              <span style={{ marginLeft: 8 }}>LinkedIn</span>
+            </a>
+          </div>
+        </div>
+
+        {/* HERO */}
+        <div className="hero">
+          <motion.div className="card" whileHover={{ y: -2 }}>
+            <div className="cardInner">
+              <h2 className="title">
+                Azure Data Engineering
+                <br />
+                <span style={{ color: "rgba(255,255,255,0.65)" }}>
+                  Production pipelines • reliability • performance
+                </span>
+              </h2>
+
+              <div className="subtitle">
+                {headline} This site is designed to make it easy to evaluate fit: pipeline ownership,
+                production readiness, and the thinking behind reliability and performance.
+              </div>
+
+              {/* 3-line professional summary (recruiter-first) */}
+              <div className="panel" style={{ marginTop: 12 }}>
+                <div className="smallTitle">Professional summary</div>
+                <div style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", lineHeight: 1.55 }}>
+                  <div>Data Engineer building Azure-native pipelines that support analytics and ML workloads.</div>
+                  <div>Focused on reliability (quality gates, reconciliation, monitoring) and predictable operations.</div>
+                  <div>Hands-on with Spark transformations, modeling, and query performance tuning.</div>
+                </div>
+              </div>
+
+              <div className="pills" style={{ marginTop: 12 }}>
+                <span className="pill">
+                  <ShieldCheck className="h-4 w-4" /> Production reliability
+                </span>
+                <span className="pill">ADF</span>
+                <span className="pill">ADLS</span>
+                <span className="pill">Databricks</span>
+                <span className="pill">PySpark</span>
+                <span className="pill">SQL DW</span>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 14,
+                  display: "grid",
+                  gap: 10,
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                }}
+              >
+                <Stat icon={BadgeCheck} label="Focus" value="Production" note="quality • SLAs • monitoring" />
+                <Stat icon={Gauge} label="Performance" value="Tuning" note="queries • indexes • partitions" />
+                <Stat icon={Clock} label="Ops" value="Support" note="alerts • retries • recovery" />
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div className="card" whileHover={{ y: -2 }}>
+            <div className="cardInner">
+              <div className="sectionTitle" style={{ marginTop: 0 }}>
+                <h2>Projects</h2>
+                <p>Engineering case-study framing</p>
+              </div>
+
+              {/* PROJECT CARDS (replaces placeholders) */}
+              <div className="panel">
+                <div className="smallTitle">Selected repositories</div>
+
+                <div style={{ display: "grid", gap: 10, marginTop: 10 }}>
+                  {projects.map((p) => (
+                    <motion.div
+                      key={p.id}
+                      className="panel"
+                      style={{
+                        padding: 12,
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        background:
+                          "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
+                      }}
+                      whileHover={{ y: -2 }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                          <div className="badgeIcon" style={{ width: 34, height: 34 }}>
+                            <p.icon className="h-5 w-5" />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {p.title}
+                            </div>
+                            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginTop: 2 }}>
+                              {p.oneLiner}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                          <a className="btn" href={p.url} target="_blank" rel="noreferrer">
+                            Repo
+                          </a>
+                          <button className="btn" onClick={() => setActiveProject(p)}>
+                            Architecture
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Metrics block */}
+                      <div style={{ marginTop: 10 }}>
+                        <div className="smallTitle">Scale & scope</div>
+                        <ul className="list" style={{ marginTop: 8 }}>
+                          {p.metrics.map((m) => (
+                            <li key={m}>
+                              <span className="dot" />
+                              <span>{m}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ height: 12 }} />
+
+              <div className="panel">
+                <div className="smallTitle">What recruiters usually care about</div>
+                <ul className="list" style={{ marginTop: 10 }}>
+                  <li>
+                    <span className="dot" />
+                    <span>Can you own production pipelines end-to-end?</span>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <span>Do you prevent bad data and detect issues fast?</span>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <span>Can you tune performance and manage cost?</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div style={{ height: 12 }} />
+
+              <div className="panel">
+                <div className="smallTitle">Contact</div>
+                <div className="stack">
+                  <a className="stackChip" href="mailto:gunaprashant@gmail.com">
+                    gunaprashant@gmail.com
+                  </a>
+                  <a
+                    className="stackChip"
+                    href="https://www.linkedin.com/in/gthota27/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    linkedin.com/in/gthota27
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* PIPELINE */}
+        <div className="pipelineWrap">
+          <div className="sectionTitle">
+            <h2>End-to-End Data Pipeline Architecture</h2>
+            <p>Click a stage to drill down • subtle packet animation indicates flow</p>
+          </div>
+
+          <motion.div className={cx("card", "pipelineCard")} whileHover={{ y: -2 }}>
+            {/* Subtle flow line + data packets (non-gimmicky) */}
+            <svg
+              width="100%"
+              height="130"
+              viewBox="0 0 1120 130"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                opacity: 0.55,
+                pointerEvents: "none",
+              }}
+              preserveAspectRatio="none"
+            >
+              <defs>
+                {/* Azure-ish gradient accent */}
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="rgba(78,168,222,0.26)" />
+                  <stop offset="55%" stopColor="rgba(30,129,176,0.24)" />
+                  <stop offset="100%" stopColor="rgba(20,93,160,0.22)" />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="2" result="b" />
+                  <feMerge>
+                    <feMergeNode in="b" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <path d={PATH_D} fill="none" stroke="url(#g)" strokeWidth="2" strokeDasharray="7 10" />
+
+              {/* Data packets (subtle, slow, staggered) */}
+              {[0, 1, 2].map((i) => (
+                <circle
+                  key={i}
+                  r={3}
+                  cx={40}
+                  cy={70}
+                  fill="rgba(255,255,255,0.55)"
+                  filter="url(#glow)"
+                  opacity={0.38}
+                >
+                  <animateMotion dur="7s" repeatCount="indefinite" begin={`${i * 2}s`} path={PATH_D} />
+                  <animate attributeName="opacity" values="0.10;0.45;0.10" dur="2.8s" repeatCount="indefinite" />
+                </circle>
+              ))}
+            </svg>
+
+            <div className="pipelineRow">
+              {pipeline.map((n) => (
+                <div
+                  key={n.id}
+                  className={cx("node", selected === n.id && "nodeActive")}
+                  onClick={() => setSelected(n.id)}
+                >
+                  <div className="nodeTop">
+                    <div className="nodeLeft">
+                      <div className="badgeIcon">
+                        <NodeIcon id={n.id} />
+                      </div>
+                      <div>
+                        <div className="nodeLabel">{n.label}</div>
+                        <div className="nodeHint">{n.hint}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="detailGrid">
+              <div className="panel">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: 12,
+                  }}
+                >
+                  <div>
+                    <h3 style={{ margin: 0 }}>{summary.title}</h3>
+                    <div style={{ marginTop: 6, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
+                      {summaryMode ? "Outcome-oriented summary" : "Implementation detail"}
+                    </div>
+                  </div>
+                  <div className="stackChip" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <Layers className="h-4 w-4" /> {summaryMode ? "Recruiter" : "Engineer"}
+                  </div>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {summaryMode ? (
+                    <motion.ul
+                      key="summary"
+                      className="list"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.16 }}
+                      style={{ marginTop: 12 }}
+                    >
+                      {summary.bullets.map((b) => (
+                        <li key={b}>
+                          <span className="dot" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </motion.ul>
+                  ) : (
+                    <motion.div
+                      key="technical"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.16 }}
+                      style={{ marginTop: 12 }}
+                    >
+                      <div className="smallTitle">Tech</div>
+                      <div className="stack">
+                        {tech.tech.map((t) => (
+                          <span key={t} className="stackChip">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div style={{ height: 12 }} />
+
+                      <div className="smallTitle">Reliability controls</div>
+                      <ul className="list" style={{ marginTop: 10 }}>
+                        {tech.reliability.map((r) => (
+                          <li key={r}>
+                            <span className="dot" />
+                            <span>{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Right panel: Recruiter-friendly “Proof” block */}
+              <div className="panel">
+                <div className="smallTitle">How I think about production (2026)</div>
+                <ul className="list" style={{ marginTop: 10 }}>
+                  <li>
+                    <span className="dot" />
+                    <span>
+                      <b>Observability:</b> freshness, failures, volume anomalies, drift.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <span>
+                      <b>Data quality:</b> validation gates + reconciliation before publish.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <span>
+                      <b>Cost & performance:</b> incremental loads, partitions, query tuning.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <span>
+                      <b>Governance:</b> access control, audit-friendly logging, clear ownership.
+                    </span>
+                  </li>
+                </ul>
+
+                <div style={{ height: 12 }} />
+
+                <div className="smallTitle">Project notes</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.55 }}>
+                  Each repo is presented with scale signals and an architecture diagram to make evaluation fast for hiring.
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="footer">© {new Date().getFullYear()} • guna-thota</div>
+        </div>
+      </div>
+
+      {/* Architecture Modal */}
+      <Modal
+        open={!!activeProject}
+        title={activeProject?.architectureTitle || "Architecture"}
+        onClose={() => setActiveProject(null)}
+      >
+        {activeProject ? (
+          <div>
+            <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, marginBottom: 10 }}>
+              Repository:{" "}
+              <a href={activeProject.url} target="_blank" rel="noreferrer" style={{ color: "rgba(120,200,255,0.95)" }}>
+                {activeProject.repo}
+              </a>
+            </div>
+            <div
+              style={{
+                borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+                padding: 12,
+              }}
+            >
+              {activeProject.architectureSvg}
+            </div>
+          </div>
+        ) : null}
+      </Modal>
+    </div>
+  );
+}
