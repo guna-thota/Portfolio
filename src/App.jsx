@@ -116,7 +116,7 @@ const technicalByStage = {
 
 /* =========================
    PROJECTS (your 3 repos)
-   NOTE: titles avoid “AI” wording on the site
+   Site titles avoid “AI” wording
    ========================= */
 
 const projects = [
@@ -125,7 +125,6 @@ const projects = [
     icon: LineChart,
     title: "Farming Yield Prediction (Time-Series)",
     repo: "AI-Assisted-Farming-for-Crop-Recommendation-Farm-Yield-Prediction-Application",
-    // If the repo is NOT under guna-thota, replace this URL with the real one.
     url: "https://github.com/guna-thota/AI-Assisted-Farming-for-Crop-Recommendation-Farm-Yield-Prediction-Application",
     oneLiner: "Multivariate seasonal modeling with an interpretable sequence approach for yield forecasting.",
     metrics: [
@@ -154,7 +153,7 @@ const projects = [
 
         <rect x="535" y="95" width="200" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
         <text x="635" y="130" fill="white" fontSize="14" textAnchor="middle">Sequence Model</text>
-        <text x="635" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">LSTM-style + attention</text>
+        <text x="635" y="150" fill="rgba(255,255,255,0.65)" fontSize="12" textAnchor="middle">attention + temporal</text>
 
         <rect x="785" y="95" width="100" height="70" rx="14" fill="rgba(15,36,58,0.55)" stroke="rgba(78,168,222,0.35)" />
         <text x="835" y="130" fill="white" fontSize="14" textAnchor="middle">Output</text>
@@ -277,19 +276,10 @@ function NodeIcon({ id }) {
 function Stat({ icon: Icon, label, value, note }) {
   return (
     <div className="panel" style={{ padding: 14 }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-        }}
-      >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
         <div>
           <div className="smallTitle">{label}</div>
-          <div style={{ fontSize: 18, fontWeight: 800, marginTop: 2 }}>
-            {value}
-          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, marginTop: 2 }}>{value}</div>
         </div>
         <div
           style={{
@@ -305,11 +295,7 @@ function Stat({ icon: Icon, label, value, note }) {
           <Icon className="h-5 w-5" />
         </div>
       </div>
-      {note ? (
-        <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
-          {note}
-        </div>
-      ) : null}
+      {note ? <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{note}</div> : null}
     </div>
   );
 }
@@ -347,8 +333,7 @@ function Modal({ open, title, children, onClose }) {
               width: "min(920px, 96vw)",
               borderRadius: 18,
               border: "1px solid rgba(255,255,255,0.12)",
-              background:
-                "linear-gradient(180deg, rgba(15,25,40,0.92), rgba(10,18,30,0.92))",
+              background: "linear-gradient(180deg, rgba(15,25,40,0.92), rgba(10,18,30,0.92))",
               boxShadow: "0 24px 80px rgba(0,0,0,0.55)",
               overflow: "hidden",
             }}
@@ -363,12 +348,7 @@ function Modal({ open, title, children, onClose }) {
               }}
             >
               <div style={{ fontWeight: 800 }}>{title}</div>
-              <button
-                className="btn"
-                style={{ padding: "8px 10px" }}
-                onClick={onClose}
-                aria-label="Close"
-              >
+              <button className="btn" style={{ padding: "8px 10px" }} onClick={onClose} aria-label="Close">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -384,16 +364,9 @@ function Modal({ open, title, children, onClose }) {
 export default function App() {
   const [summaryMode, setSummaryMode] = useState(true);
   const [selected, setSelected] = useState("adf");
-
   const [activeProject, setActiveProject] = useState(null);
 
-  const headline = useMemo(
-    () =>
-      summaryMode
-        ? "Recruiter view: scope, ownership, and outcomes."
-        : "Engineer view: implementation details + reliability controls.",
-    [summaryMode]
-  );
+  const headline = useMemo(() => (summaryMode ? "Overview" : "Implementation"), [summaryMode]);
 
   const summary = summaryByStage[selected];
   const tech = technicalByStage[selected];
@@ -415,8 +388,8 @@ export default function App() {
           </div>
 
           <div className="actions">
-            <div className="toggle" title="Toggle recruiter vs technical detail">
-              <span>Recruiter</span>
+            <div className="toggle" title="Toggle high-level vs technical detail">
+              <span>Overview</span>
               <div className="switch" onClick={() => setSummaryMode((v) => !v)}>
                 <motion.div
                   className="knob"
@@ -424,7 +397,7 @@ export default function App() {
                   transition={{ type: "spring", stiffness: 520, damping: 30 }}
                 />
               </div>
-              <span>Engineer</span>
+              <span>Implementation</span>
             </div>
 
             <a className="btn" href="mailto:gunaprashant@gmail.com">
@@ -432,12 +405,7 @@ export default function App() {
               <span style={{ marginLeft: 8 }}>Email</span>
             </a>
 
-            <a
-              className="btn"
-              href="https://www.linkedin.com/in/gthota27/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="btn" href="https://www.linkedin.com/in/gthota27/" target="_blank" rel="noreferrer">
               <Linkedin className="h-4 w-4" />
               <span style={{ marginLeft: 8 }}>LinkedIn</span>
             </a>
@@ -456,12 +424,14 @@ export default function App() {
                 </span>
               </h2>
 
+              {/* Option B subtitle */}
               <div className="subtitle">
-                {headline} This site is designed to make it easy to evaluate fit: pipeline ownership,
-                production readiness, and the thinking behind reliability and performance.
+                {headline}. I like pipelines that don’t need babysitting. My focus is building Azure data systems that
+                stay stable under real-world conditions—bad data, late arrivals, retries, and changing schemas. Below is
+                the way I structure a typical end-to-end pipeline and what I optimize at each layer.
               </div>
 
-              {/* 3-line professional summary (recruiter-first) */}
+              {/* 3-line professional summary */}
               <div className="panel" style={{ marginTop: 12 }}>
                 <div className="smallTitle">Professional summary</div>
                 <div style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", lineHeight: 1.55 }}>
@@ -482,17 +452,11 @@ export default function App() {
                 <span className="pill">SQL DW</span>
               </div>
 
-              <div
-                style={{
-                  marginTop: 14,
-                  display: "grid",
-                  gap: 10,
-                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                }}
-              >
-                <Stat icon={BadgeCheck} label="Focus" value="Production" note="quality • SLAs • monitoring" />
-                <Stat icon={Gauge} label="Performance" value="Tuning" note="queries • indexes • partitions" />
-                <Stat icon={Clock} label="Ops" value="Support" note="alerts • retries • recovery" />
+              {/* Updated stat copy (same positioning/layout) */}
+              <div style={{ marginTop: 14, display: "grid", gap: 10, gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
+                <Stat icon={BadgeCheck} label="Focus" value="Production Delivery" note="quality gates • SLAs • ownership" />
+                <Stat icon={Gauge} label="Performance" value="Query & Cost" note="partitions • caching • tuning" />
+                <Stat icon={Clock} label="Ops" value="Stable Runs" note="retries • alerts • recoveries" />
               </div>
             </div>
           </motion.div>
@@ -501,10 +465,10 @@ export default function App() {
             <div className="cardInner">
               <div className="sectionTitle" style={{ marginTop: 0 }}>
                 <h2>Projects</h2>
-                <p>Engineering case-study framing</p>
+                <p>Selected work + how it’s built</p>
               </div>
 
-              {/* PROJECT CARDS (replaces placeholders) */}
+              {/* PROJECT CARDS */}
               <div className="panel">
                 <div className="smallTitle">Selected repositories</div>
 
@@ -516,8 +480,7 @@ export default function App() {
                       style={{
                         padding: 12,
                         border: "1px solid rgba(255,255,255,0.08)",
-                        background:
-                          "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
                       }}
                       whileHover={{ y: -2 }}
                     >
@@ -565,20 +528,21 @@ export default function App() {
 
               <div style={{ height: 12 }} />
 
+              {/* Option A (replaces the AI-sounding panel) */}
               <div className="panel">
-                <div className="smallTitle">What recruiters usually care about</div>
+                <div className="smallTitle">What I optimize for</div>
                 <ul className="list" style={{ marginTop: 10 }}>
                   <li>
                     <span className="dot" />
-                    <span>Can you own production pipelines end-to-end?</span>
+                    <span>I build pipelines with <b>clear contracts</b> (schema + SLAs) and enforce validation early.</span>
                   </li>
                   <li>
                     <span className="dot" />
-                    <span>Do you prevent bad data and detect issues fast?</span>
+                    <span>I design for <b>recovery</b>: retries, idempotency, and backfills without duplicate data.</span>
                   </li>
                   <li>
                     <span className="dot" />
-                    <span>Can you tune performance and manage cost?</span>
+                    <span>I tune for <b>cost and speed</b>: incremental loads, partitions, and query performance.</span>
                   </li>
                 </ul>
               </div>
@@ -591,12 +555,7 @@ export default function App() {
                   <a className="stackChip" href="mailto:gunaprashant@gmail.com">
                     gunaprashant@gmail.com
                   </a>
-                  <a
-                    className="stackChip"
-                    href="https://www.linkedin.com/in/gthota27/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a className="stackChip" href="https://www.linkedin.com/in/gthota27/" target="_blank" rel="noreferrer">
                     linkedin.com/in/gthota27
                   </a>
                 </div>
@@ -613,7 +572,7 @@ export default function App() {
           </div>
 
           <motion.div className={cx("card", "pipelineCard")} whileHover={{ y: -2 }}>
-            {/* Subtle flow line + data packets (non-gimmicky) */}
+            {/* Subtle flow line + data packets */}
             <svg
               width="100%"
               height="130"
@@ -628,7 +587,6 @@ export default function App() {
               preserveAspectRatio="none"
             >
               <defs>
-                {/* Azure-ish gradient accent */}
                 <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="rgba(78,168,222,0.26)" />
                   <stop offset="55%" stopColor="rgba(30,129,176,0.24)" />
@@ -645,7 +603,6 @@ export default function App() {
 
               <path d={PATH_D} fill="none" stroke="url(#g)" strokeWidth="2" strokeDasharray="7 10" />
 
-              {/* Data packets (subtle, slow, staggered) */}
               {[0, 1, 2].map((i) => (
                 <circle
                   key={i}
@@ -664,11 +621,7 @@ export default function App() {
 
             <div className="pipelineRow">
               {pipeline.map((n) => (
-                <div
-                  key={n.id}
-                  className={cx("node", selected === n.id && "nodeActive")}
-                  onClick={() => setSelected(n.id)}
-                >
+                <div key={n.id} className={cx("node", selected === n.id && "nodeActive")} onClick={() => setSelected(n.id)}>
                   <div className="nodeTop">
                     <div className="nodeLeft">
                       <div className="badgeIcon">
@@ -686,22 +639,15 @@ export default function App() {
 
             <div className="detailGrid">
               <div className="panel">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: 12,
-                  }}
-                >
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
                   <div>
                     <h3 style={{ margin: 0 }}>{summary.title}</h3>
                     <div style={{ marginTop: 6, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
-                      {summaryMode ? "Outcome-oriented summary" : "Implementation detail"}
+                      {summaryMode ? "Summary" : "Details"}
                     </div>
                   </div>
                   <div className="stackChip" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                    <Layers className="h-4 w-4" /> {summaryMode ? "Recruiter" : "Engineer"}
+                    <Layers className="h-4 w-4" /> {summaryMode ? "Overview" : "Implementation"}
                   </div>
                 </div>
 
@@ -757,41 +703,22 @@ export default function App() {
                 </AnimatePresence>
               </div>
 
-              {/* Right panel: Recruiter-friendly “Proof” block */}
               <div className="panel">
-                <div className="smallTitle">How I think about production (2026)</div>
+                <div className="smallTitle">Production principles</div>
                 <ul className="list" style={{ marginTop: 10 }}>
-                  <li>
-                    <span className="dot" />
-                    <span>
-                      <b>Observability:</b> freshness, failures, volume anomalies, drift.
-                    </span>
-                  </li>
-                  <li>
-                    <span className="dot" />
-                    <span>
-                      <b>Data quality:</b> validation gates + reconciliation before publish.
-                    </span>
-                  </li>
-                  <li>
-                    <span className="dot" />
-                    <span>
-                      <b>Cost & performance:</b> incremental loads, partitions, query tuning.
-                    </span>
-                  </li>
-                  <li>
-                    <span className="dot" />
-                    <span>
-                      <b>Governance:</b> access control, audit-friendly logging, clear ownership.
-                    </span>
-                  </li>
+                  <li><span className="dot" /><span><b>Observability:</b> freshness, failures, volume anomalies, drift.</span></li>
+                  <li><span className="dot" /><span><b>Data quality:</b> validation gates + reconciliation before publish.</span></li>
+                  <li><span className="dot" /><span><b>Cost & performance:</b> incremental loads, partitions, query tuning.</span></li>
+                  <li><span className="dot" /><span><b>Governance:</b> access control, audit-friendly logging, clear ownership.</span></li>
                 </ul>
 
                 <div style={{ height: 12 }} />
 
+                {/* Option A project notes */}
                 <div className="smallTitle">Project notes</div>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.55 }}>
-                  Each repo is presented with scale signals and an architecture diagram to make evaluation fast for hiring.
+                  Every project includes a short architecture view and the engineering choices that mattered: data shape,
+                  validation, scaling, and execution.
                 </div>
               </div>
             </div>
@@ -802,11 +729,7 @@ export default function App() {
       </div>
 
       {/* Architecture Modal */}
-      <Modal
-        open={!!activeProject}
-        title={activeProject?.architectureTitle || "Architecture"}
-        onClose={() => setActiveProject(null)}
-      >
+      <Modal open={!!activeProject} title={activeProject?.architectureTitle || "Architecture"} onClose={() => setActiveProject(null)}>
         {activeProject ? (
           <div>
             <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, marginBottom: 10 }}>
