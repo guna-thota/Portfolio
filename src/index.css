@@ -1,13 +1,12 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guna Durga Prashanth Thota | Data Engineer</title>
-    <meta name="description" content="Data Engineer specializing in Azure data pipelines, PySpark, Databricks, and LLM pipelines. 2+ years experience building production-grade cloud data systems." />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+/* index.css */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0b0f17;
+  color: white;
+}
+
+#root {
+  min-height: 100vh;
+}
