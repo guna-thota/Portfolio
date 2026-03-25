@@ -1,12 +1,1075 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guna Thota | Portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guna Durga Prashanth Thota | Data Engineer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --accent: #58a6ff;
+      --accent2: #1f6feb;
+      --text: #c9d1d9;
+      --text2: #8b949e;
+      --border: #30363d;
+      --green: #3fb950;
+      --orange: #d29922;
+      --purple: #a371f7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 17, 23, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 0 1.5rem;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+      display: block;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 1.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 40%, rgba(31,111,235,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 20%, rgba(163,113,247,0.07) 0%, transparent 60%);
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.2;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+    .hero-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 0 4px rgba(88,166,255,0.2), 0 0 30px rgba(31,111,235,0.3);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-sub {
+      color: var(--text2);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.7rem 1.6rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary { background: var(--accent2); color: #fff; }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(31,111,235,0.4); }
+
+    .btn-secondary { background: transparent; color: var(--accent); border: 1px solid rgba(88,166,255,0.5); }
+    .btn-secondary:hover { background: rgba(88,166,255,0.1); transform: translateY(-2px); }
+
+    /* SECTIONS */
+    section { padding: 5rem 1.5rem; }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    .section-header { margin-bottom: 2.5rem; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .section-line {
+      width: 48px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 2px;
+      margin-top: 0.6rem;
+    }
+
+    /* ABOUT */
+    #about { background: var(--bg2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text2);
+      line-height: 1.85;
+      font-size: 0.975rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-text strong { color: var(--accent); font-weight: 600; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      min-width: 260px;
+    }
+
+    .stat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 0.8rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .stat-num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text2);
+      margin-top: 0.35rem;
+      line-height: 1.3;
+    }
+
+    /* SKILLS */
+    #skills { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-category {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-category:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .skill-cat-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text2);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+    .tag {
+      padding: 0.28rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    .tag-blue { background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.25); }
+    .tag-green { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.25); }
+    .tag-purple { background: rgba(163,113,247,0.12); color: var(--purple); border: 1px solid rgba(163,113,247,0.25); }
+    .tag-orange { background: rgba(210,153,34,0.12); color: var(--orange); border: 1px solid rgba(210,153,34,0.25); }
+
+    /* EXPERIENCE */
+    #experience { background: var(--bg2); }
+
+    .timeline { position: relative; padding-left: 2rem; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent2) 0%, rgba(48,54,61,0.3) 100%);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 20px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 2px solid var(--accent2);
+      box-shadow: 0 0 0 3px rgba(31,111,235,0.2);
+      transition: all 0.2s;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(31,111,235,0.3);
+    }
+
+    .timeline-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .timeline-card:hover { border-color: rgba(88,166,255,0.4); }
+
+    .timeline-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-company { font-size: 1.05rem; font-weight: 700; color: #fff; }
+
+    .timeline-period {
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: rgba(88,166,255,0.1);
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .timeline-role { font-size: 0.875rem; color: var(--accent); margin-bottom: 0.2rem; font-style: italic; }
+
+    .timeline-location { font-size: 0.78rem; color: var(--text2); margin-bottom: 1rem; }
+
+    .timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .timeline-bullets li {
+      font-size: 0.875rem;
+      color: var(--text2);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.65;
+    }
+
+    .timeline-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--accent2); }
+
+    /* PROJECTS */
+    #projects { background: var(--bg); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--purple));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-4px); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-header { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; }
+
+    .project-icon {
+      font-size: 1.8rem;
+      width: 48px;
+      height: 48px;
+      background: var(--bg3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .project-title { font-size: 1rem; font-weight: 700; color: #fff; padding-top: 0.5rem; }
+
+    .project-desc {
+      font-size: 0.875rem;
+      color: var(--text2);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.25rem;
+    }
+
+    .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .tech-badge {
+      background: var(--bg3);
+      color: var(--text2);
+      padding: 0.22rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-family: 'Courier New', monospace;
+      border: 1px solid var(--border);
+    }
+
+    /* EDUCATION */
+    #education { background: var(--bg2); }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .edu-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .edu-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .edu-icon {
+      font-size: 1.8rem;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(31,111,235,0.2), rgba(163,113,247,0.2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .edu-school { font-size: 0.975rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .edu-degree { font-size: 0.85rem; color: var(--accent); margin-bottom: 0.4rem; }
+    .edu-period { font-size: 0.78rem; color: var(--text2); }
+
+    /* CERTIFICATIONS */
+    #certifications { background: var(--bg); }
+
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+    }
+
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .cert-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .cert-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .cert-name { font-size: 0.875rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .cert-issuer { font-size: 0.75rem; color: var(--accent); margin-bottom: 0.2rem; }
+    .cert-date { font-size: 0.72rem; color: var(--text2); }
+
+    /* CONTACT */
+    #contact { background: var(--bg2); }
+
+    .contact-wrapper { text-align: center; }
+
+    .contact-subtitle {
+      color: var(--text2);
+      font-size: 0.975rem;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      justify-content: center;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      background: rgba(88,166,255,0.05);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text2);
+      font-size: 0.82rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-up:nth-child(2) { transition-delay: 0.05s; }
+    .fade-up:nth-child(3) { transition-delay: 0.1s; }
+    .fade-up:nth-child(4) { transition-delay: 0.15s; }
+    .fade-up:nth-child(5) { transition-delay: 0.2s; }
+    .fade-up:nth-child(6) { transition-delay: 0.25s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-stats { min-width: unset; grid-template-columns: 1fr 1fr; }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+        gap: 0.5rem;
+      }
+
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .timeline { padding-left: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 3.5rem 1rem; }
+      .hero { padding: 70px 1rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">GDPT</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-avatar">⚡</div>
+    <div class="hero-badge">Data Engineer</div>
+    <h1>Guna Durga Prashanth Thota</h1>
+    <p class="hero-sub">📍 Hyderabad, India &nbsp;·&nbsp; Azure · Databricks · PySpark · AI Pipelines</p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn btn-primary">View Experience →</a>
+      <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Who I Am</div>
+      <h2 class="section-title">About Me</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>
+          Data Engineer with <strong>2+ years of experience</strong> building and maintaining cloud data pipelines on Azure.
+          Most of my work has been in distributed ETL systems using <strong>Azure Data Factory, Databricks, and PySpark</strong>
+          handling high-volume healthcare data at scale.
+        </p>
+        <p>
+          I've dug into pipeline bottlenecks and reliability issues hands-on — at Hexaware I reworked Spark jobs that
+          cut runtime by <strong>30%</strong> and built validation logic that meaningfully reduced production data defects.
+        </p>
+        <p>
+          Since graduating with my <strong>MS in Computer Science from Purdue University Northwest</strong>, I've been actively
+          building with orchestration tools, LLM pipelines, and real-time streaming systems.
+        </p>
+      </div>
+      <div class="about-stats fade-up">
+        <div class="stat-card">
+          <div class="stat-num">2+</div>
+          <div class="stat-label">Years of Experience</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">30%</div>
+          <div class="stat-label">Pipeline Runtime Cut</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10M+</div>
+          <div class="stat-label">Records Daily</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Certifications</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">What I Know</div>
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">🐍 Languages</div>
+        <div class="skill-tags">
+          <span class="tag tag-blue">Python</span>
+          <span class="tag tag-blue">SQL</span>
+          <span class="tag tag-blue">PySpark</span>
+        </div>
+      </div>
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">☁️ Cloud & Platforms</div>
+        <div class="skill-tags">
+          <span class="tag tag-purple">Azure Data Factory</span>
+          <span class="tag tag-purple">Azure Databricks</span>
+          <span class="tag tag-purple">ADLS</span>
+          <span class="tag tag-purple">Azure SQL</span>
+        </div>
+      </div>
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">🗄️ Storage</div>
+        <div class="skill-tags">
+          <span class="tag tag-green">Delta Lake</span>
+          <span class="tag tag-green">Parquet</span>
+        </div>
+      </div>
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">🔧 Data Engineering</div>
+        <div class="skill-tags">
+          <span class="tag tag-orange">ETL/ELT</span>
+          <span class="tag tag-orange">Data Warehousing</span>
+          <span class="tag tag-orange">Data Modeling</span>
+          <span class="tag tag-orange">Incremental Loads</span>
+          <span class="tag tag-orange">Watermark Logic</span>
+          <span class="tag tag-orange">Data Validation</span>
+          <span class="tag tag-orange">Reconciliation</span>
+          <span class="tag tag-orange">Data Partitioning</span>
+        </div>
+      </div>
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">🔄 Orchestration & Streaming</div>
+        <div class="skill-tags">
+          <span class="tag tag-green">Apache Airflow</span>
+        </div>
+      </div>
+      <div class="skill-category fade-up">
+        <div class="skill-cat-title">🛠️ DevOps</div>
+        <div class="skill-tags">
+          <span class="tag tag-blue">Azure DevOps</span>
+          <span class="tag tag-blue">Git</span>
+          <span class="tag tag-blue">CI/CD</span>
+          <span class="tag tag-blue">Azure Monitor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Where I've Worked</div>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item fade-up">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-top">
+            <span class="timeline-company">🤖 Outlier.ai</span>
+            <span class="timeline-period">Oct 2024 – Jan 2025</span>
+          </div>
+          <div class="timeline-role">Data Engineer · Fixed-Term Contract</div>
+          <div class="timeline-location">📍 Remote (Indiana), USA</div>
+          <ul class="timeline-bullets">
+            <li>Engineered Python and PySpark ELT pipelines reducing batch failures by 20% through enforced schema validation and execution controls.</li>
+            <li>Implemented structured logging and automated retry mechanisms across recurring batch jobs, improving pipeline observability and reducing manual intervention during failure recovery.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-up">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-top">
+            <span class="timeline-company">🏢 Hexaware Technologies</span>
+            <span class="timeline-period">Mar 2022 – May 2023</span>
+          </div>
+          <div class="timeline-role">Associate Software Engineer – Data Engineering</div>
+          <div class="timeline-location">📍 Chennai, India</div>
+          <ul class="timeline-bullets">
+            <li>Developed Azure Data Factory pipelines integrated with Databricks (PySpark) processing 10M+ records daily across 5+ ingestion workflows in TB-scale healthcare data environments, collaborating with a team of 10+ engineers.</li>
+            <li>Optimized distributed SQL and Spark transformations for healthcare reporting systems, reducing pipeline runtime by 30% and strengthening enterprise SLA compliance.</li>
+            <li>Collaborated with analytics and BI teams to deliver stable reporting datasets supporting enterprise dashboards and clinical reporting systems.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-up">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-top">
+            <span class="timeline-company">☁️ Amazon Web Services</span>
+            <span class="timeline-period">Apr 2021 – Apr 2022</span>
+          </div>
+          <div class="timeline-role">Cloud Engineering Intern / Trainee</div>
+          <div class="timeline-location">📍 Hyderabad, India</div>
+          <ul class="timeline-bullets">
+            <li>Gained hands-on experience provisioning and securing cloud infrastructure using EC2, S3, IAM, and VPC in both lab and real-task settings.</li>
+            <li>Developed observability dashboards in CloudWatch, monitoring compute and storage resources across deployed environments.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">What I've Built</div>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card fade-up">
+        <div class="project-header">
+          <div class="project-icon">🤖</div>
+          <div class="project-title">AI Data Analysis Agent</div>
+        </div>
+        <div class="project-desc">
+          Built a NL-to-SQL workflow converting natural language queries into executable SQL over structured datasets.
+          Extended with LangGraph-based agent orchestration and RAG architecture for multi-step analytical reasoning.
+          Designed a schema-aware validation layer preventing unsafe query execution and improving analytical reliability.
+        </div>
+        <div class="project-tech">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">GPT-4o</span>
+          <span class="tech-badge">LangChain</span>
+          <span class="tech-badge">LangGraph</span>
+          <span class="tech-badge">DuckDB</span>
+          <span class="tech-badge">SQL</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-up">
+        <div class="project-header">
+          <div class="project-icon">🔗</div>
+          <div class="project-title">Automated Data Integration Framework</div>
+        </div>
+        <div class="project-desc">
+          Implemented reusable Azure Data Factory ELT templates consolidating multi-source datasets into centralized
+          ADLS storage. Engineered retry mechanisms and Delta Lake schema enforcement ensuring stable and consistent
+          ingestion pipelines. Standardized Spark transformation patterns improving scalability and downstream data quality.
+        </div>
+        <div class="project-tech">
+          <span class="tech-badge">ADF</span>
+          <span class="tech-badge">PySpark</span>
+          <span class="tech-badge">SQL</span>
+          <span class="tech-badge">Delta Lake</span>
+          <span class="tech-badge">Airflow</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Academic Background</div>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="edu-grid">
+
+      <div class="edu-card fade-up">
+        <div class="edu-icon">🎓</div>
+        <div>
+          <div class="edu-school">Purdue University Northwest</div>
+          <div class="edu-degree">M.S. in Computer Science</div>
+          <div class="edu-period">📍 Indiana, USA &nbsp;·&nbsp; Aug 2023 – May 2025</div>
+        </div>
+      </div>
+
+      <div class="edu-card fade-up">
+        <div class="edu-icon">🏛️</div>
+        <div>
+          <div class="edu-school">Sreenidhi Institute of Science & Technology</div>
+          <div class="edu-degree">B.Tech in Electronics & Communication Engineering</div>
+          <div class="edu-period">📍 Hyderabad, India &nbsp;·&nbsp; Aug 2018 – Jun 2022</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Credentials</div>
+      <h2 class="section-title">Certifications</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🏆</span>
+        <div class="cert-name">Azure Data Engineer Associate</div>
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-date">DP-203 · Dec 2022</div>
+      </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">☁️</span>
+        <div class="cert-name">Azure Fundamentals</div>
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-date">AZ-900 · Aug 2022</div>
+      </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🌐</span>
+        <div class="cert-name">AWS Cloud Foundations</div>
+        <div class="cert-issuer">Amazon Web Services</div>
+        <div class="cert-date">Academy Graduate · Apr 2022</div>
+      </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🔐</span>
+        <div class="cert-name">CyberSecurity Essentials</div>
+        <div class="cert-issuer">Cisco</div>
+        <div class="cert-date">Aug 2019</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header fade-up" style="text-align:center;">
+      <div class="section-label">Let's Connect</div>
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="section-line" style="margin: 0.6rem auto 0;"></div>
+    </div>
+    <div class="contact-wrapper">
+      <p class="contact-subtitle fade-up">
+        Open to data engineering roles and interesting collaborations. Reach out via any of the channels below!
+      </p>
+      <div class="contact-links fade-up">
+        <a class="contact-link" href="mailto:gunaprashant@gmail.com">
+          <span>✉️</span> gunaprashant@gmail.com
+        </a>
+        <a class="contact-link" href="https://linkedin.com/in/gthota27" target="_blank" rel="noopener">
+          <span>💼</span> linkedin.com/in/gthota27
+        </a>
+        <a class="contact-link" href="https://github.com/guna-thota" target="_blank" rel="noopener">
+          <span>🐙</span> github.com/guna-thota
+        </a>
+        <a class="contact-link" href="tel:+919704249218">
+          <span>📱</span> +91 9704249218
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Built by <a href="#hero">Guna Durga Prashanth Thota</a> · 2025 · Deployed via GitHub Pages</p>
+</footer>
+
+<script>
+  // Hamburger toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Scroll-based fade-in animations
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
 </html>
