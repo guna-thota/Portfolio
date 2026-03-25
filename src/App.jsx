@@ -1,143 +1,143 @@
-import React, { useMemo, useState } from “react”;
-import { motion, AnimatePresence } from “framer-motion”;
+import React, { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
 ShieldCheck, Server, Database, BarChart3, Cloud, Sparkles,
 Mail, Linkedin, BadgeCheck, Gauge, Clock, Layers, X,
 Github, Download, Briefcase, GraduationCap, Award, ExternalLink, Code2,
-} from “lucide-react”;
+} from "lucide-react";
 
-const cx = (…c) => c.filter(Boolean).join(” “);
+const cx = (...c) => c.filter(Boolean).join(" ");
 
-const PATH_D = “M 40 70 C 220 20, 360 120, 540 70 S 860 20, 1080 70”;
+const PATH_D = "M 40 70 C 220 20, 360 120, 540 70 S 860 20, 1080 70";
 
 const pipeline = [
-{ id: “source”, label: “Source Systems”,     hint: “APIs • files • operational DBs” },
-{ id: “adf”,    label: “Azure Data Factory”, hint: “orchestration • scheduling • retries” },
-{ id: “adls”,   label: “ADLS Gen2”,          hint: “raw → bronze → silver → gold” },
-{ id: “dbx”,    label: “Databricks (Spark)”, hint: “transformations • incremental” },
-{ id: “sqldw”,  label: “Azure SQL DW”,       hint: “modeling • performance” },
-{ id: “bi”,     label: “BI Layer”,           hint: “KPIs • semantic layer” },
+{ id: "source", label: "Source Systems",     hint: "APIs • files • operational DBs" },
+{ id: "adf",    label: "Azure Data Factory", hint: "orchestration • scheduling • retries" },
+{ id: "adls",   label: "ADLS Gen2",          hint: "raw → bronze → silver → gold" },
+{ id: "dbx",    label: "Databricks (Spark)", hint: "transformations • incremental" },
+{ id: "sqldw",  label: "Azure SQL DW",       hint: "modeling • performance" },
+{ id: "bi",     label: "BI Layer",           hint: "KPIs • semantic layer" },
 ];
 
 const summaryByStage = {
-source: { title: “Source Systems”,     bullets: [“Defined ingestion contracts (schema + SLAs)”, “Validated early to prevent bad data entering the pipeline”, “Captured metadata for traceability and auditability”] },
-adf:    { title: “Azure Data Factory”, bullets: [“Parameterized pipelines for dev/stage/prod”, “Retries + alerting for stable operations”, “Idempotent loads using watermark strategy”] },
-adls:   { title: “ADLS Gen2”,          bullets: [“Layered lake design (raw/bronze/silver/gold)”, “Partitioning aligned to reporting access patterns”, “RBAC + lifecycle policies for governance and cost control”] },
-dbx:    { title: “Databricks (Spark)”, bullets: [“PySpark transformations (cleanse, join, dedupe, enrich)”, “Incremental processing (MERGE) to reduce compute and runtime”, “Quality gates before publish to serving layer”] },
-sqldw:  { title: “Azure SQL DW”,       bullets: [“Star schema / dimensional modeling for analytics”, “Index + execution plan tuning for faster queries”, “Freshness monitoring for reporting SLAs”] },
-bi:     { title: “BI Layer”,           bullets: [“Standardized KPI definitions (single source of truth)”, “Dashboards designed around decision workflows”, “Controlled access to ensure trusted metrics”] },
+source: { title: "Source Systems",     bullets: ["Defined ingestion contracts (schema + SLAs)", "Validated early to prevent bad data entering the pipeline", "Captured metadata for traceability and auditability"] },
+adf:    { title: "Azure Data Factory", bullets: ["Parameterized pipelines for dev/stage/prod", "Retries + alerting for stable operations", "Idempotent loads using watermark strategy"] },
+adls:   { title: "ADLS Gen2",          bullets: ["Layered lake design (raw/bronze/silver/gold)", "Partitioning aligned to reporting access patterns", "RBAC + lifecycle policies for governance and cost control"] },
+dbx:    { title: "Databricks (Spark)", bullets: ["PySpark transformations (cleanse, join, dedupe, enrich)", "Incremental processing (MERGE) to reduce compute and runtime", "Quality gates before publish to serving layer"] },
+sqldw:  { title: "Azure SQL DW",       bullets: ["Star schema / dimensional modeling for analytics", "Index + execution plan tuning for faster queries", "Freshness monitoring for reporting SLAs"] },
+bi:     { title: "BI Layer",           bullets: ["Standardized KPI definitions (single source of truth)", "Dashboards designed around decision workflows", "Controlled access to ensure trusted metrics"] },
 };
 
 const technicalByStage = {
-source: { tech: [“REST APIs”, “Batch ingestion”, “Schema checks”],        reliability: [“Schema drift detection”, “Null/format validation”, “Volume anomaly alerts”] },
-adf:    { tech: [“ADF”, “Managed Identity”, “Key Vault”],                  reliability: [“Exponential retry”, “Watermark incremental loads”, “Alert routing by severity”] },
-adls:   { tech: [“ADLS Gen2”, “Parquet/Delta”, “ACLs/RBAC”],              reliability: [“Immutable raw zone”, “Checksum/duplicate detection”, “Partition strategy for performance”] },
-dbx:    { tech: [“Databricks”, “PySpark”, “Delta Lake”],                   reliability: [“Skew handling + repartition”, “AQE / caching where needed”, “Pre-publish validation gates”] },
-sqldw:  { tech: [“Azure SQL DW”, “T-SQL”, “Modeling”],                    reliability: [“Row-count reconciliation”, “Index/statistics management”, “Late-arrival handling”] },
-bi:     { tech: [“Power BI / Tableau”, “Semantic modeling”],               reliability: [“Metric consistency checks”, “Staleness indicators”, “Governed access”] },
+source: { tech: ["REST APIs", "Batch ingestion", "Schema checks"],        reliability: ["Schema drift detection", "Null/format validation", "Volume anomaly alerts"] },
+adf:    { tech: ["ADF", "Managed Identity", "Key Vault"],                  reliability: ["Exponential retry", "Watermark incremental loads", "Alert routing by severity"] },
+adls:   { tech: ["ADLS Gen2", "Parquet/Delta", "ACLs/RBAC"],              reliability: ["Immutable raw zone", "Checksum/duplicate detection", "Partition strategy for performance"] },
+dbx:    { tech: ["Databricks", "PySpark", "Delta Lake"],                   reliability: ["Skew handling + repartition", "AQE / caching where needed", "Pre-publish validation gates"] },
+sqldw:  { tech: ["Azure SQL DW", "T-SQL", "Modeling"],                    reliability: ["Row-count reconciliation", "Index/statistics management", "Late-arrival handling"] },
+bi:     { tech: ["Power BI / Tableau", "Semantic modeling"],               reliability: ["Metric consistency checks", "Staleness indicators", "Governed access"] },
 };
 
 const projects = [
 {
-id: “proj1”,
-title: “AI Data Analysis Agent”,
-repo: “Ai-dataanalysis-agent”,
-url: “https://github.com/guna-thota/Ai-dataanalysis-agent”,
-oneLiner: “NL-to-SQL workflow with LangGraph orchestration and RAG architecture.”,
-stack: [“Python”, “GPT-4o”, “LangChain”, “LangGraph”, “DuckDB”, “SQL”],
+id: "proj1",
+title: "AI Data Analysis Agent",
+repo: "Ai-dataanalysis-agent",
+url: "https://github.com/guna-thota/Ai-dataanalysis-agent",
+oneLiner: "NL-to-SQL workflow with LangGraph orchestration and RAG architecture.",
+stack: ["Python", "GPT-4o", "LangChain", "LangGraph", "DuckDB", "SQL"],
 metrics: [
-“Natural language → executable SQL over structured datasets”,
-“Schema-aware validation layer preventing unsafe query execution”,
-“LangGraph agent orchestration for multi-step reasoning”,
-“In-memory OLAP analytics via DuckDB”,
+"Natural language → executable SQL over structured datasets",
+"Schema-aware validation layer preventing unsafe query execution",
+"LangGraph agent orchestration for multi-step reasoning",
+"In-memory OLAP analytics via DuckDB",
 ],
 },
 {
-id: “proj2”,
-title: “Automated Data Integration Framework”,
-repo: “automated-data-integration”,
-url: “https://github.com/guna-thota”,
-oneLiner: “Reusable ADF ELT templates with Delta Lake schema enforcement and Airflow orchestration.”,
-stack: [“ADF”, “PySpark”, “SQL”, “Delta Lake”, “Apache Airflow”, “ADLS”],
+id: "proj2",
+title: "Automated Data Integration Framework",
+repo: "automated-data-integration",
+url: "https://github.com/guna-thota",
+oneLiner: "Reusable ADF ELT templates with Delta Lake schema enforcement and Airflow orchestration.",
+stack: ["ADF", "PySpark", "SQL", "Delta Lake", "Apache Airflow", "ADLS"],
 metrics: [
-“Reusable ADF ELT templates across multi-source ingestion workflows”,
-“Delta Lake schema enforcement + retry mechanisms”,
-“Standardized Spark transformation patterns for scalability”,
-“Airflow orchestration for scheduling and monitoring”,
+"Reusable ADF ELT templates across multi-source ingestion workflows",
+"Delta Lake schema enforcement + retry mechanisms",
+"Standardized Spark transformation patterns for scalability",
+"Airflow orchestration for scheduling and monitoring",
 ],
 },
 ];
 
 const experience = [
 {
-role: “Data Engineer”,
-suffix: “(Fixed-Term Contract)”,
-company: “Outlier.ai”,
-location: “Remote, Indiana, USA”,
-period: “Oct 2024 – Jan 2025”,
+role: "Data Engineer",
+suffix: "(Fixed-Term Contract)",
+company: "Outlier.ai",
+location: "Remote, Indiana, USA",
+period: "Oct 2024 – Jan 2025",
 bullets: [
-“Engineered Python and PySpark ELT pipelines with schema validation and execution controls, reducing batch failures by 20%.”,
-“Implemented structured logging and automated retry mechanisms, improving pipeline observability and reducing manual intervention during failure recovery.”,
+"Engineered Python and PySpark ELT pipelines with schema validation and execution controls, reducing batch failures by 20%.",
+"Implemented structured logging and automated retry mechanisms, improving pipeline observability and reducing manual intervention during failure recovery.",
 ],
 },
 {
-role: “Associate Software Engineer – Data Engineering”,
-suffix: “”,
-company: “Hexaware Technologies”,
-location: “Chennai, India”,
-period: “Mar 2022 – May 2023”,
+role: "Associate Software Engineer – Data Engineering",
+suffix: "",
+company: "Hexaware Technologies",
+location: "Chennai, India",
+period: "Mar 2022 – May 2023",
 bullets: [
-“Built ADF pipelines integrated with Databricks (PySpark) processing 10M+ records daily across 5+ ingestion workflows in TB-scale healthcare environments.”,
-“Optimized distributed SQL and Spark transformations achieving a 30% reduction in pipeline runtime, strengthening enterprise SLA compliance.”,
-“Collaborated with analytics and BI teams to deliver stable reporting datasets supporting enterprise dashboards and clinical systems.”,
+"Built ADF pipelines integrated with Databricks (PySpark) processing 10M+ records daily across 5+ ingestion workflows in TB-scale healthcare environments.",
+"Optimized distributed SQL and Spark transformations achieving a 30% reduction in pipeline runtime, strengthening enterprise SLA compliance.",
+"Collaborated with analytics and BI teams to deliver stable reporting datasets supporting enterprise dashboards and clinical systems.",
 ],
 },
 {
-role: “Cloud Engineering Intern”,
-suffix: “”,
-company: “Amazon Web Services (AWS)”,
-location: “Hyderabad, India”,
-period: “Apr 2021 – Apr 2022”,
+role: "Cloud Engineering Intern",
+suffix: "",
+company: "Amazon Web Services (AWS)",
+location: "Hyderabad, India",
+period: "Apr 2021 – Apr 2022",
 bullets: [
-“Provisioned and secured cloud infrastructure (EC2, S3, IAM, VPC) across development environments.”,
-“Built CloudWatch dashboards tracking compute utilization, storage consumption, and alerting thresholds.”,
+"Provisioned and secured cloud infrastructure (EC2, S3, IAM, VPC) across development environments.",
+"Built CloudWatch dashboards tracking compute utilization, storage consumption, and alerting thresholds.",
 ],
 },
 ];
 
 const certifications = [
-{ name: “Azure Data Engineer Associate”, code: “DP-203”, date: “Dec 2022”, issuer: “Microsoft” },
-{ name: “Azure Fundamentals”,            code: “AZ-900”, date: “Aug 2022”, issuer: “Microsoft” },
-{ name: “AWS Academy Cloud Foundations”, code: “AWS”,    date: “Apr 2022”, issuer: “Amazon”    },
-{ name: “CyberSecurity Essentials”,      code: “CISCO”,  date: “Aug 2019”, issuer: “Cisco”     },
+{ name: "Azure Data Engineer Associate", code: "DP-203", date: "Dec 2022", issuer: "Microsoft" },
+{ name: "Azure Fundamentals",            code: "AZ-900", date: "Aug 2022", issuer: "Microsoft" },
+{ name: "AWS Academy Cloud Foundations", code: "AWS",    date: "Apr 2022", issuer: "Amazon"    },
+{ name: "CyberSecurity Essentials",      code: "CISCO",  date: "Aug 2019", issuer: "Cisco"     },
 ];
 
 function NodeIcon({ id }) {
-const cls = “h-5 w-5”;
+const cls = "h-5 w-5";
 switch (id) {
-case “source”: return <Server className={cls} />;
-case “adf”:    return <Cloud className={cls} />;
-case “adls”:   return <Database className={cls} />;
-case “dbx”:    return <Sparkles className={cls} />;
-case “sqldw”:  return <Database className={cls} />;
-case “bi”:     return <BarChart3 className={cls} />;
+case "source": return <Server className={cls} />;
+case "adf":    return <Cloud className={cls} />;
+case "adls":   return <Database className={cls} />;
+case "dbx":    return <Sparkles className={cls} />;
+case "sqldw":  return <Database className={cls} />;
+case "bi":     return <BarChart3 className={cls} />;
 default:       return <Server className={cls} />;
 }
 }
 
 function Stat({ icon: Icon, label, value, note }) {
 return (
-<div className=“panel” style={{ padding: 14 }}>
-<div style={{ display: “flex”, alignItems: “center”, justifyContent: “space-between”, gap: 10 }}>
+<div className="panel" style={{ padding: 14 }}>
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
 <div>
 <div className="smallTitle">{label}</div>
 <div style={{ fontSize: 18, fontWeight: 800, marginTop: 2 }}>{value}</div>
 </div>
-<div style={{ width: 40, height: 40, borderRadius: 14, border: “1px solid rgba(255,255,255,0.10)”, background: “rgba(255,255,255,0.05)”, display: “grid”, placeItems: “center” }}>
+<div style={{ width: 40, height: 40, borderRadius: 14, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.05)", display: "grid", placeItems: "center" }}>
 <Icon className="h-5 w-5" />
 </div>
 </div>
-{note && <div style={{ marginTop: 8, fontSize: 12, color: “rgba(255,255,255,0.55)” }}>{note}</div>}
+{note && <div style={{ marginTop: 8, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{note}</div>}
 </div>
 );
 }
@@ -148,18 +148,18 @@ return (
 {open && (
 <motion.div
 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-style={{ position: “fixed”, inset: 0, background: “rgba(0,0,0,0.65)”, display: “grid”, placeItems: “center”, zIndex: 9999, padding: 16 }}
+style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", display: "grid", placeItems: "center", zIndex: 9999, padding: 16 }}
 onClick={onClose}
 >
 <motion.div
 initial={{ y: 10, opacity: 0, scale: 0.98 }} animate={{ y: 0, opacity: 1, scale: 1 }}
 exit={{ y: 10, opacity: 0, scale: 0.98 }} transition={{ duration: 0.16 }}
 onClick={(e) => e.stopPropagation()}
-style={{ width: “min(700px, 96vw)”, borderRadius: 18, border: “1px solid rgba(255,255,255,0.12)”, background: “linear-gradient(180deg, rgba(15,25,40,0.97), rgba(10,18,30,0.97))”, boxShadow: “0 24px 80px rgba(0,0,0,0.55)”, overflow: “hidden” }}
+style={{ width: "min(700px, 96vw)", borderRadius: 18, border: "1px solid rgba(255,255,255,0.12)", background: "linear-gradient(180deg, rgba(15,25,40,0.97), rgba(10,18,30,0.97))", boxShadow: "0 24px 80px rgba(0,0,0,0.55)", overflow: "hidden" }}
 >
-<div style={{ display: “flex”, justifyContent: “space-between”, alignItems: “center”, padding: “14px 16px”, borderBottom: “1px solid rgba(255,255,255,0.10)” }}>
+<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px", borderBottom: "1px solid rgba(255,255,255,0.10)" }}>
 <div style={{ fontWeight: 800 }}>{title}</div>
-<button className=“btn” style={{ padding: “8px 10px” }} onClick={onClose}><X className="h-4 w-4" /></button>
+<button className="btn" style={{ padding: "8px 10px" }} onClick={onClose}><X className="h-4 w-4" /></button>
 </div>
 <div style={{ padding: 16 }}>{children}</div>
 </motion.div>
@@ -171,10 +171,10 @@ style={{ width: “min(700px, 96vw)”, borderRadius: 18, border: “1px solid r
 
 export default function App() {
 const [summaryMode, setSummaryMode] = useState(true);
-const [selected, setSelected] = useState(“adf”);
+const [selected, setSelected] = useState("adf");
 const [activeProject, setActiveProject] = useState(null);
 
-const headline = useMemo(() => (summaryMode ? “Overview” : “Implementation”), [summaryMode]);
+const headline = useMemo(() => (summaryMode ? "Overview" : "Implementation"), [summaryMode]);
 const summary = summaryByStage[selected];
 const tech = technicalByStage[selected];
 
