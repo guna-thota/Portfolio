@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-ShieldCheck, Server, Database, BarChart3, Cloud, Sparkles,
-Mail, Linkedin, BadgeCheck, Gauge, Clock, Layers, X,
-Github, Download, Briefcase, GraduationCap, Award, ExternalLink, Code2,
+  ShieldCheck, Server, Database, BarChart3, Cloud, Sparkles,
+  Mail, Linkedin, BadgeCheck, Gauge, Clock, Layers, X,
+  Github, Download, Briefcase, GraduationCap, Award, ExternalLink, Code2,
 } from "lucide-react";
 
 const cx = (...c) => c.filter(Boolean).join(" ");
