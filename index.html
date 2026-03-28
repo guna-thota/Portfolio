@@ -176,6 +176,20 @@
       margin-bottom: 2rem;
     }
 
+    .hero-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--green);
+      background: rgba(63,185,80,0.1);
+      border: 1px solid rgba(63,185,80,0.3);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+
     .hero-btns {
       display: flex;
       gap: 1rem;
@@ -333,6 +347,109 @@
 
     /* EXPERIENCE */
     #experience { background: var(--bg2); }
+
+    /* CODING */
+    #coding { background: var(--bg2); }
+
+    .coding-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .coding-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .coding-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .coding-title {
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .coding-sub {
+      color: var(--text2);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .coding-list {
+      margin-top: 0.9rem;
+      list-style: none;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .coding-list li {
+      color: var(--text2);
+      font-size: 0.86rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .coding-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .badge-wall {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .badge-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: center;
+      padding: 0.7rem 0.4rem;
+      background: rgba(13,17,23,0.55);
+    }
+
+    .badge-icon {
+      font-size: 1.35rem;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+
+    .badge-name {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.35;
+    }
+
+    .badge-date {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.68rem;
+      color: var(--text2);
+    }
+
+    .coding-link {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.84rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .coding-link:hover { text-decoration: underline; }
 
     .timeline { position: relative; padding-left: 2rem; }
 
@@ -634,6 +751,8 @@
     @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .about-stats { min-width: unset; grid-template-columns: 1fr 1fr; }
+      .coding-grid { grid-template-columns: 1fr; }
+      .badge-wall { grid-template-columns: repeat(3, minmax(90px, 1fr)); }
 
       .nav-links {
         display: none;
@@ -672,6 +791,7 @@
     <ul class="nav-links" id="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#coding">Coding</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#education">Education</a></li>
@@ -690,8 +810,10 @@
     <div class="hero-badge">Data Engineer</div>
     <h1>Guna Durga Prashanth Thota</h1>
     <p class="hero-sub">📍 Hyderabad, India &nbsp;·&nbsp; Azure · Databricks · PySpark · AI Pipelines</p>
+    <div class="hero-highlight">🟢 Open to Data Engineering opportunities</div>
     <div class="hero-btns">
       <a href="#experience" class="btn btn-primary">View Experience →</a>
+      <a href="https://leetcode.com/u/prashanth_thota/" class="btn btn-secondary" target="_blank" rel="noopener">LeetCode Profile ↗</a>
       <a href="#contact" class="btn btn-secondary">Get In Touch</a>
     </div>
   </div>
@@ -737,6 +859,54 @@
         <div class="stat-card">
           <div class="stat-num">4</div>
           <div class="stat-label">Certifications</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CODING PROFILE -->
+<section id="coding">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Problem Solving</div>
+      <h2 class="section-title">LeetCode Highlights</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="coding-grid">
+      <div class="coding-card fade-up">
+        <div class="coding-title">Consistent algorithm and SQL practice</div>
+        <p class="coding-sub">
+          I actively use LeetCode to sharpen data structures, system thinking, and SQL problem-solving skills that directly support robust data engineering solutions.
+        </p>
+        <ul class="coding-list">
+          <li>Demonstrates interview readiness with current platform achievements.</li>
+          <li>Strengthens optimization mindset for ETL and distributed query workloads.</li>
+          <li>Builds speed and accuracy for technical screening rounds.</li>
+        </ul>
+        <a class="coding-link" href="https://leetcode.com/u/prashanth_thota/" target="_blank" rel="noopener">
+          View full profile on LeetCode ↗
+        </a>
+      </div>
+      <div class="coding-card fade-up">
+        <div class="coding-title">Recent badges (2026)</div>
+        <p class="coding-sub">Latest badge milestones from my LeetCode profile:</p>
+        <div class="badge-wall">
+          <div class="badge-item">
+            <span class="badge-icon">🏗️</span>
+            <div class="badge-name">Architecture</div>
+            <span class="badge-date">Earned: 2026-03-28</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">🧭</span>
+            <div class="badge-name">Data Navigator</div>
+            <span class="badge-date">Active</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">🗃️</span>
+            <div class="badge-name">Top SQL 50</div>
+            <span class="badge-date">Earned: 2026-03-17</span>
+          </div>
         </div>
       </div>
     </div>
@@ -957,42 +1127,51 @@
 </section>
 
 <!-- CERTIFICATIONS -->
-<div class="certs-grid">
-  <div class="cert-card fade-up">
-    <span class="cert-icon">🏆</span>
-    <div class="cert-name">Quantium Data Analytics</div>
-    <div class="cert-issuer">Forage</div>
-    <div class="cert-date">Job Simulation · Mar 2026</div>
-  </div>
+<section id="certifications">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-label">Credentials</div>
+      <h2 class="section-title">Certifications</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🏆</span>
+        <div class="cert-name">Quantium Data Analytics</div>
+        <div class="cert-issuer">Forage</div>
+        <div class="cert-date">Job Simulation · Mar 2026</div>
+      </div>
 
-  <div class="cert-card fade-up">
-    <span class="cert-icon">🏆</span>
-    <div class="cert-name">Azure Data Engineer Associate</div>
-    <div class="cert-issuer">Microsoft</div>
-    <div class="cert-date">DP-203 · Dec 2022</div>
-  </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🏆</span>
+        <div class="cert-name">Azure Data Engineer Associate</div>
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-date">DP-203 · Dec 2022</div>
+      </div>
 
-  <div class="cert-card fade-up">
-    <span class="cert-icon">☁️</span>
-    <div class="cert-name">Azure Fundamentals</div>
-    <div class="cert-issuer">Microsoft</div>
-    <div class="cert-date">AZ-900 · Aug 2022</div>
-  </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">☁️</span>
+        <div class="cert-name">Azure Fundamentals</div>
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-date">AZ-900 · Aug 2022</div>
+      </div>
 
-  <div class="cert-card fade-up">
-    <span class="cert-icon">🌐</span>
-    <div class="cert-name">AWS Cloud Foundations</div>
-    <div class="cert-issuer">Amazon Web Services</div>
-    <div class="cert-date">Academy Graduate · Apr 2022</div>
-  </div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🌐</span>
+        <div class="cert-name">AWS Cloud Foundations</div>
+        <div class="cert-issuer">Amazon Web Services</div>
+        <div class="cert-date">Academy Graduate · Apr 2022</div>
+      </div>
 
-  <div class="cert-card fade-up">
-    <span class="cert-icon">🔐</span>
-    <div class="cert-name">CyberSecurity Essentials</div>
-    <div class="cert-issuer">Cisco</div>
-    <div class="cert-date">Aug 2019</div>
+      <div class="cert-card fade-up">
+        <span class="cert-icon">🔐</span>
+        <div class="cert-name">CyberSecurity Essentials</div>
+        <div class="cert-issuer">Cisco</div>
+        <div class="cert-date">Aug 2019</div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 <!-- CONTACT -->
 <section id="contact">
   <div class="container">
@@ -1014,6 +1193,9 @@
         </a>
         <a class="contact-link" href="https://github.com/guna-thota" target="_blank" rel="noopener">
           <span>🐙</span> github.com/guna-thota
+        </a>
+        <a class="contact-link" href="https://leetcode.com/u/prashanth_thota/" target="_blank" rel="noopener">
+          <span>🧠</span> leetcode.com/u/prashanth_thota
         </a>
         <a class="contact-link" href="tel:+919704249218">
           <span>📱</span> +91 9704249218
